@@ -6,3 +6,5 @@
  Supports find, insert, update, delete, etc.
  
  Simple to use, yet effective database for use in small to mid-sized projects.
+
+ Initial version will be available soon.
