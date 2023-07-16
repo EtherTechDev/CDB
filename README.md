@@ -17,7 +17,8 @@
 
  Table rows have an internal column name which is reserved, meaning you can not use it: $Cid$.
  It is used to internally make table rows unique. It can be used in search and update expressions, but use it with care.
- 
+
+ Please report any errors you find, we will fix them ASAP!
  
  Supported database functions:
   * createDatabase  // Creates a database
