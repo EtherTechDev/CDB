@@ -117,5 +117,7 @@ findexpression.name = [{ "eq": "kalle" }, { "eq": "nisse" }]
 let sortexpression = { "sorton": "age", "type":"number", "sortdir":true };
 let rowOffset = 0, rowsToFind = 25;
 let rs = table.find(findexpression, sortexpression, rowOffset, rowsToFind);
+console.log(rs);
 ```
 
+Just a brief example, please check out the example provided in the project.
