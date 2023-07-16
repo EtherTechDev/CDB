@@ -1,5 +1,5 @@
 # CDB
- A reasonably small and effective database written in JavaScript ES6.
+ A reasonably small and effective database written in JavaScript.
  
  Uses JSON files as storage media.
   
