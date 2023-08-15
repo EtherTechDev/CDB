@@ -255,8 +255,8 @@ class cdbtable {
 				inserted++;
 			}
 		} else {
-			data.$Cid$ = id;
-			id++;
+			data.$Cid$ = this.id;
+			this.id++;
 			this.table.push(data);
 			inserted++;
 		}
@@ -268,7 +268,7 @@ class cdbtable {
 			return this.table.length;
 		}
 		if(options.type=="lastinsertid") {
-			return id-1;
+			return this.id-1;
 		}
 		return inserted;
 	}
@@ -303,7 +303,7 @@ class cdbtable {
 
 	delete(what) {
 		let rowsDeleted = 0;
-		let rs = this.iterate(what, undefined, undefined, undefined, exprhandler, resulthandler, this);
+		let rs = this.iterate(what, undefined, undefined, undefined, this.exprhandler, this.resulthandler, this);
 		let foundIndex;
 		let iterations = rs.length;
 		for(let i = 0; i < iterations; i++) {
@@ -392,7 +392,7 @@ class cdbtable {
 				}
 			}
 
-			let rs = this.iterate(wfind, undefined, undefined, undefined, exprhandler, resulthandler, this);
+			let rs = this.iterate(wfind, undefined, undefined, undefined, this.exprhandler, this.resulthandler, this);
 			for(let i = 0; i < rs.length; i++) {
 				if(Array.isArray(newdata)) {
 					this.updateByCid(rs[i]["$Cid$"], newdata[j]);
@@ -612,7 +612,7 @@ class cdbtable {
 									}
 								}
 							} else {
-								console.err("Missing expression handler for: " + comp);
+								console.error("Missing expression handler for: " + comp);
 							}
 							svalue=value;
 						}
@@ -622,7 +622,7 @@ class cdbtable {
 					}
 				}
 				if(addIt==-99) {
-					console.err("**** Break on count!");
+					console.error("**** Break on count!");
 					break;
 				}
 
@@ -918,7 +918,8 @@ class cdbtable {
 			}
 
 		}
-		this.exprhandler["not like"] = function(data, trigger, value, cs) {
+		// Support for "not like" (with a space) will be discontinued, this implements support for "notlike" instead
+		this.exprhandler["notlike"] = this.exprhandler["not like"] = function(data, trigger, value, cs) {
 			if(data!=undefined && value!=undefined) {
 
 				data=String(data);
@@ -1018,7 +1019,7 @@ class cdbtable {
 				}
 
 				default: {
-					console.err("Unknown function: " + funcname);
+					console.error("Unknown function: " + funcname);
 				}
 			}
 			return trigger;
@@ -1117,7 +1118,7 @@ class cdbdatabase {
 		try {
 		return this.parent.database[this.filename]["tables"][tablename];
 		} catch(e) {
-			console.err(e);
+			console.error(e);
 			return -1;
 		}
 	}
@@ -1170,8 +1171,8 @@ class cdbdatabase {
 
 		} catch(e) {
 			if(e.code != "ENOENT") {
-				console.err("Failed to write to database!");
-				console.err(e);
+				console.error("Failed to write to database!");
+				console.error(e);
 				setTimeout(self.writeDatabase, 1000);
 
 				return;
@@ -1183,8 +1184,8 @@ class cdbdatabase {
 
 				return;
 			}
-			console.err("Failed to write to database!");
-			console.err(e);
+			console.error("Failed to write to database!");
+			console.error(e);
 			setTimeout(self.writeDatabase, 1000, dbfilename);
 		}
 	}
@@ -1226,7 +1227,7 @@ module.exports = new class CDB {
 
 		if(this.database) {
 			if(this.database[filename]) {
-				console.err("Error: database already exist in this instance.")
+				console.error("Error: database already exist in this instance.")
 				return -1;
 			}
 		}
@@ -1279,8 +1280,8 @@ module.exports = new class CDB {
 		try {
 			db = JSON.parse(dbjsontext)
 		} catch (e) {
-			console.err("CDB ERROR");
-			console.err(e);
+			console.error("CDB ERROR");
+			console.error(e);
 			return false;
 		}
 
